@@ -104,29 +104,29 @@
         <hr width="25%"> 
         <p style="font-size: 25px; color:#663300;">Check-in allows users to create personal incubators that let groups of similarly-driven people keep track of each others' progress and hold each other accountable for progress goals.</p>
         <button id="showButton" type="button" onClick="show()" name="showButton" value="show" class="btn btn-lg btn-warning">Sign up!</button>
-        <form role="email">
+        <form method="POST" action="/">
+            {{ form.hidden_tag() }}
             <div class="col-xs-offset-4">
             <div class="form-group">
                 <label for="firstname" class="sr-only">First Name</label>
-                <input type="text" class="form-control input-lg" placeholder="First Name" id="firstname">
+                {{ form.first_name(placeholder="First name", class="form-control input-lg", id="firstname") }}
             </div>
             <div class="form-group">
                 <label for="lastname" class="sr-only">Last Name</label>
-                <input type="text" class="form-control input-lg" placeholder="Last Name" id="lastname">
+                {{ form.last_name(placeholder="Last name", class="form-control input-lg", id="lastname") }}
             </div>
             <div class="form-group">
                 <label for="email" class="sr-only">Email Address</label>
-                <input type="email" class="form-control input-lg" placeholder="Email" id="emailaddr">
+                {{ form.email(placeholder="Email", class="form-control input-lg", id="emailaddr") }}
             </div>
             <div class="form-group">
                 <label class="sr-only" for="password">Password</label>
-                <input type="password" class="form-control input-lg" placeholder="Password" id="passwordfor">
+                {{ form.password(class="form-control input-lg", placeholder="Password", id="passwordfor") }}
             </div></div>
             <div id="afterbutton">
-                <button type="button" class="btn-info btn btn-lg">Sign In</button>
+                {{ form.submit(class="btn btn-info btn-lg") }}
                 <button type="button" class="btn btn-default btn-lg"
                data-dismiss="modal" onClick="hide()" name="hideButton">Cancel</button></div>
-        </form>
         
         
     </div>
