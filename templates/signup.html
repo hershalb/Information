@@ -103,7 +103,54 @@
         <h1 style="font-size:75px; padding-top:50px; color:#663300;"><strong>WELCOME TO CHECKIN</strong></h1>
         <hr width="25%"> 
         <p style="font-size: 25px; color:#663300;">Check-in allows users to create personal incubators that let groups of similarly-driven people keep track of each others' progress and hold each other accountable for progress goals.</p>
-            <a id ="showButton" value="show" type="button" class="btn btn-lg btn-warning" href="signup">Sign up!</a>
+       <!--  <button id="showButton" type="button" name="showButton" value="show" class="btn btn-lg btn-warning">Sign up!</button> -->
+        <form method="POST" action="/signup">
+            {{ form.hidden_tag() }}
+            <div class="col-xs-offset-4">
+            <div class="form-group">
+                <label for="firstname" class="sr-only">First Name</label>
+                {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form.first_name(placeholder="First name", class="form-control input-lg", id="firstname") }}
+            </div>
+            <div class="form-group">
+                <label for="lastname" class="sr-only">Last Name</label>
+                {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form.last_name(placeholder="Last name", class="form-control input-lg", id="lastname") }}
+            </div>
+            <div class="form-group">
+                <label for="email" class="sr-only">Email Address</label>
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+                
+                {{ form.email(placeholder="Email", class="form-control input-lg", id="emailaddr") }}
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="password">Password</label>
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form.password(class="form-control input-lg", placeholder="Password", id="passwordfor") }}
+            </div></div>
+            <div id="afterbutton">
+                {{ form.submit(class="btn btn-info btn-lg") }}
+                <a type="button" class="btn btn-default btn-lg"
+               data-dismiss="modal" href="/" name="hideButton">Cancel</a></div>
         
         
     </div>

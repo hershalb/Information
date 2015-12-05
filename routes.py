@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from models import db
+from models import db, User
 from forms import SignupForm
 
 app = Flask(__name__)
@@ -11,17 +11,22 @@ app.secret_key = "development-key"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+	return render_template("index.html")
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
 	form = SignupForm()
 
 	if request.method == "POST":
-		return "Success!"
+		if form.validate() == False:
+			return render_template("signup.html", form = form)
+		else:
+			newuser = User(form.first_name.data, form.last_name.data, form.email.data, form.password.data)
+			db.session.add(newuser)
+			db.session.commit()
+			return "Success!"
 	elif request.method == "GET":
-		return render_template("index.html", form = form)
-
-# @app.route("/signup")
-# def signup():
-# 	form = SignupForm()
-# 	return render_template("index.html", form=form)
+		return render_template("signup.html", form = form)
 
 if __name__ == "__main__":
 	app.run(debug=True)
