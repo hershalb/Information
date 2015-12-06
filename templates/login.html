@@ -60,7 +60,7 @@
                     <li><a href="#"><i class= "fa fa-envelope-o"></i> Contact</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/login">
+                    <li><a data-toggle="modal" data-target="#loginModal">
                     <span class="glyphicon glyphicon-log-in"></span> Login</a>
                     </li>
                 </ul>
@@ -72,27 +72,39 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" href="/">&times;</button>
                 <h4 class="modal-title">Login </h4>
             </div>
             <div class="modal-body">
-                <form class="form-inline" role="email">
+                <form method="POST" action="/login" class="form-inline" role="email">
+                    {{ form.hidden_tag() }}
                     <div class="form-group">
-                        <label for="email" class="sr-only">Email Address</label>
-                        <input type="email" class="form-control input-sm" placeholder="Email" id="email">
+                        <label for="email" class="sr-only">Email</label>
+                        {% if form.email.errors %}
+                            {% for error in form.email.errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {{ form.email(placeholder="Email", class="form-control input-sm", id="emailaddr") }}
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="password">Password</label>
-                        <input type="password" class="form-control input-sm" placeholder="Password" id="password">
+                        {% if form.password.errors %}
+                            {% for error in form.password.errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+
+                        {{ form.password(class="form-control input-sm", placeholder="Password", id="passwordfor") }}
                     </div>
                     <div class="checkbox">
                         <label>
                         <input type="checkbox"> Remember Me
                     </label>
                 </div>
-                        <button type="button" class="btn-info btn btn-sm">Sign In</button>
-                        <button type="button" class="btn btn-default btn-sm"
-                       data-dismiss="modal">Cancel</button>
+                        {{ form.submit(class="btn btn-info btn-sm") }}
+                        <a type="button" class="btn btn-default btn-sm" href="/">Cancel</a>
                 </form>
             </div>
         </div>
@@ -116,6 +128,9 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="static/js/bootstrap.min.js"></script>
     <script>
+    $(window).load(function(){
+        $('#loginModal').modal('show');
+    });
 
 
 </script>
