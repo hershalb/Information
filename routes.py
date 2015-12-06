@@ -15,6 +15,12 @@ def index():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+	if 'email' in session:
+		email = session['email']
+		user = User.query.filter_by(email=email).first()
+		firstname = user.firstname
+		return redirect(url_for('home', firstname=firstname))
+
 	form = SignupForm()
 
 	if request.method == "POST":
@@ -33,10 +39,24 @@ def signup():
 
 @app.route('/home/<firstname>')
 def home(firstname):
+	if 'email' not in session:
+		return redirect(url_for('login'))
+
 	return render_template('home.html', firstname = firstname)
+
+@app.route('/logout')
+def logout():
+	session.pop('email', None)
+	return redirect(url_for('index'))
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
+	if 'email' in session:
+		email = session['email']
+		user = User.query.filter_by(email=email).first()
+		firstname = user.firstname
+		return redirect(url_for('home', firstname=firstname))
+		
 	form = LoginForm()
 	if request.method == "POST":
 		if form.validate() == False:
