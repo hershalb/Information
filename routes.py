@@ -18,8 +18,8 @@ def signup():
 	if 'email' in session:
 		email = session['email']
 		user = User.query.filter_by(email=email).first()
-		firstname = user.firstname
-		return redirect(url_for('home', firstname=firstname))
+		firstname, lastname = user.firstname, user.lastname
+		return redirect(url_for('home', firstname=firstname, lastname = lastname))
 
 	form = SignupForm()
 
@@ -37,12 +37,22 @@ def signup():
 	elif request.method == "GET":
 		return render_template("signup.html", form = form)
 
-@app.route('/home/<firstname>')
-def home(firstname):
+@app.route('/<firstname>.<lastname>', methods = ['GET', 'POST'])
+def home(firstname, lastname):
 	if 'email' not in session:
 		return redirect(url_for('login'))
 
-	return render_template('home.html', firstname = firstname)
+	email = session['email']
+	user = User.query.filter_by(email=email).first()
+	if firstname != user.firstname:
+		firstname = user.firstname
+
+	# old_people = User.query.filter_by()  '''INCLUDES THE NAMES OF ALL THE PEOPLE IN THE DATABASE'''
+	# new_people = []
+	# for person in old_people:
+	# 	new_people.append(person.firstname)
+
+	return render_template('home.html', firstname = firstname, lastname = lastname)#, people = new_people)
 
 @app.route('/logout')
 def logout():
@@ -54,9 +64,9 @@ def login():
 	if 'email' in session:
 		email = session['email']
 		user = User.query.filter_by(email=email).first()
-		firstname = user.firstname
-		return redirect(url_for('home', firstname=firstname))
-		
+		firstname, lastname = user.firstname, user.lastname
+		return redirect(url_for('home', firstname=firstname, lastname = lastname))
+
 	form = LoginForm()
 	if request.method == "POST":
 		if form.validate() == False:
@@ -70,7 +80,8 @@ def login():
 			if user is not None and user.check_password(password):
 				session['email'] = form.email.data
 				firstname = user.firstname
-				return redirect(url_for('home', firstname = firstname))
+				lastname = user.lastname
+				return redirect(url_for('home', firstname = firstname, lastname = lastname))
 			else:
 				return redirect(url_for('login'))
 	
