@@ -27,9 +27,10 @@ class Projects(db.Model):
   __tablename__ = 'projects'
   name = db.Column(db.String(100))
   p_id = db.Column(db.Integer, primary_key = False)
-  u_id = db.Column(db.Text, db.ForeignKey('users.uid'), nullable=False, primary_key = True)
+  u_id = db.Column(db.Text, db.ForeignKey('users.uid'), nullable=False)
   goal = db.Column(db.String(50))
   plan = db.Column(db.String(300))
+  num = db.Column(db.Integer, primary_key = True)
 
   def __init__(self, project_id, projectname, user_id, goal, plan):
     self.p_id = project_id

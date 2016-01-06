@@ -49,6 +49,34 @@
             </div>
             </div>
         </nav>
+        {% if not modal %}
+        <div class="modal fade" role="dialog" id = "myModal" data-controls-modal="myModal" 
+   data-backdrop="static" 
+   data-keyboard="false" 
+   href="#">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Oops! Looks like you didn't set your goal yet! </h4>
+            </div>
+            <div class="modal-body">
+                <form role="email">
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Goal</label>
+                        <input placeholder="Goal" style="height:100px;" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="password">Password</label>
+                        <input placeholder="How do you plan on accomplishing your goal?" style="height:300px;" class="form-control input-lg">
+                    </div>
+                        <button type="button" class="btn-info btn btn-sm">Add!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
     <div id='change'class="col-sm-2">
         <ul id="nav-boys">
           <li><a href="/{{firstname}}.{{lastname}}">Home</a></li>
@@ -56,10 +84,17 @@
           <li><a href="/logout">Logout</a></li>
         </ul>
     </div>
-    <div id="full-div" class="background col-sm-10" style=" float: left; overflow:scroll; ">
-        {% for user in users %}
-            <div style="padding-left:50px;padding-top:50px;width:400px;height:400px;border-radius:50%;border:solid thick white;">
+    <div id="full-div" class="background col-sm-10" style="overflow:scroll; ">
+        {% for user in users[:1] %}
+            <div class="circles" style="margin-top:0px;">
                 <div class = "square" style="">
+                    <p style="text-align:center;vertical-align:middle;color:red;display:table-cell;">{{ user.goal }}</p>
+                </div>
+            <div>
+        {% endfor %}
+        {% for user in users[1:] %}
+            <div class="circles" style="margin-top:400px;margin-left:0px;">
+                <div class = "square1" style="">
                     <p style="text-align:center;vertical-align:middle;color:red;display:table-cell;">{{ user.goal }}</p>
                 </div>
             <div>
@@ -80,6 +115,12 @@ $("#hideButton").click(function(){
     $( ".col-sm-10" ).switchClass( "col-sm-10", "col-sm-12", 1000 );
     $(".col-sm-12").switchClass('col-sm-12', 'col-sm-10', 1000);
 });
+
+$(window).load(function(){
+    $('#myModal').modal('show');
+});
+
+
 
 </script>
 

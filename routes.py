@@ -154,13 +154,20 @@ def form():
 def project(projectnum):
 	email = session['email']
 	projects = Projects.query.filter_by(p_id=projectnum).all()
+	modal = False
+	new_projects = []
 	user = User.query.filter_by(email=email).first()
 	firstname, lastname = user.firstname, user.lastname
 	all_users = [project.u_id for project in projects]
 	if user.uid not in all_users:
 		return redirect(url_for("home", firstname=firstname, lastname=lastname))
-
-	return render_template("projects.html", firstname=firstname, lastname=lastname, users = projects)
+	for project in projects:
+		if project.goal:
+			new_projects.append(project)
+	if user.uid in [project.u_id for project in new_projects]:
+		modal = True
+	print(modal)
+	return render_template("projects.html", firstname=firstname, lastname=lastname, users = new_projects, modal = modal)
 
 @app.route("/checkform", methods=['GET', 'POST'])
 def checkform():
