@@ -22,3 +22,18 @@ class User(db.Model):
 
   def check_password(self, password):
     return check_password_hash(self.pwdhash, password)
+
+class Projects(db.Model):
+  __tablename__ = 'projects'
+  name = db.Column(db.String(100))
+  p_id = db.Column(db.Integer, primary_key = True)
+  u_id = db.Column(db.Text, db.ForeignKey('users.uid'), nullable=False)
+  goal = db.Column(db.String(50))
+  plan = db.Column(db.String(300))
+
+  def __init__(self, projectname, user_id, goal, plan):
+    self.name = projectname.title()
+    self.u_id = user_id
+    self.goal = goal
+    self.plan = plan
+

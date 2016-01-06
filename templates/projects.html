@@ -39,7 +39,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li class="active"><a id="hideButton"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Menu</a></li>
+                    <li class="active"><a onClick="hide()" id="hideButton"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Menu</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">
@@ -48,30 +48,21 @@
                 </ul>
             </div>
             </div>
-        </nav>    
-
-    <div id='change' class="form-group col-sm-2 inner-addon right-addon">
-            <i class="glyphicon glyphicon-search"></i>
-            <input type="text" class="form-control" placeholder="Search">
-        <ul id="nav-boy">
-          <li><a href="#" class="active"><span aria-hidden="true"></span>Projects</a></li>
-          <li><a href="/new-project">+ New</a></li>
+        </nav>
+    <div id='change'class="col-sm-2">
+        <ul id="nav-boys">
+          <li><a href="/{{firstname}}.{{lastname}}">Home</a></li>
+          <li><a class="active" href="#contact">Current</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
     </div>
-
-    <div class="container col-sm-10 projects">
-        <a href="/new-project">
-            <div id="new-file" class="col-sm-3" style="height:400px;background-color:#ffcc99;">
-                <span>+</span>
-            </div>
-        </a>
-        {% for project in projects %}
-        <a href="/{{project.p_id}}">
-            <div class="col-sm-3 project-files" style="height:400px;background-color:#ffcc99;">
-                <span>{{ project.name }}</span>
-            </div>
-        </a>
+    <div id="full-div" class="background col-sm-10" style=" float: left; overflow:scroll; ">
+        {% for user in users %}
+            <div style="padding-left:50px;padding-top:50px;width:400px;height:400px;border-radius:50%;border:solid thick white;">
+                <div class = "square" style="">
+                    <p style="text-align:center;vertical-align:middle;color:red;display:table-cell;">{{ user.goal }}</p>
+                </div>
+            <div>
         {% endfor %}
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -84,6 +75,11 @@
 </script>
 <script type="text/javascript">
 
+$("#hideButton").click(function(){
+    $("#change").toggle(1000);
+    $( ".col-sm-10" ).switchClass( "col-sm-10", "col-sm-12", 1000 );
+    $(".col-sm-12").switchClass('col-sm-12', 'col-sm-10', 1000);
+});
 
 </script>
 

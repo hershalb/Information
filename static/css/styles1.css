@@ -10,14 +10,63 @@ body{
     z-index:0;
 }
 
+.printchatbox {
+    border-width:thin 1px;border-style: solid; 
+    background-color:rgba(255, 153, 0, 0.3);
+    line-height: 2;color:#6E6A6B;font-size: 14pt;text-align:left;float: middle;
+    border: 1px solid #969293;width:50%;
+     height:2em;   
+}
+.printchatbox:hover {
+    background-color:rgba(172, 115, 57, 0.3);
+}
+
 #intro {
     text-align: center;
 }
 
-.form-group input {
-    width: 50%;
+.projects {
+    margin: 0px 300px;
+}
+
+.square {
+    position:absolute;
+    display:table;
+    width:300px;
+    height:300px;
+}
+
+#new-file {
+    margin-right: 50px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 225px;
+    color: white;
+}
+
+.project-files {
+    margin-right: 50px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 50px;
+    color: white;
+}
+
+#new-file:hover,
+.project-files:hover {
+    outline: #ffb366 solid;
+}
+
+.form-group input,
+.form-group textarea {
     background-color: rgba(255, 153, 0, 0.3)
 }
+
+#form-boys input,
+#form-boys textarea{
+    width: 50%;
+}
+
 #showButton {
     display: inline;
 }
@@ -30,11 +79,21 @@ body{
 }
 
 #nav-boys {
-    background-image: url(http://customtricks.com/wp-content/uploads/2014/11/iphone-and-mac-air-book-high-definition-wallpaper.jpg);
+    background-image: url(http://customtricks.com/wp-content/uploads/2014/11/iphones-and-mac-air-book-high-definition-wallpaper.jpg);
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 25%;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+#nav-boy {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 15%;
     position: fixed;
     height: 100%;
     overflow: auto;
@@ -48,7 +107,7 @@ li a {
 }
 
 li a.active {
-    background-color: rgb(192, 128, 63);
+    background-color: #555;
     color: white;
 }
 
@@ -57,7 +116,8 @@ li a:hover:not(.active) {
     color: white;
 }
 
-.form-group .error-message + input {
+.form-group .error-message + input,
+.form-group .error-message + textarea {
   border-bottom: 2px solid #db4437;
 }
 
@@ -85,3 +145,22 @@ li a:hover:not(.active) {
     color:#eeeeee;
 }
 
+/* enable absolute positioning */
+.inner-addon {
+  position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 10px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }

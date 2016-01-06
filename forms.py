@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
 
 class SignupForm(Form):
@@ -14,3 +14,9 @@ class LoginForm(Form):
 	password = PasswordField("Password", validators=[DataRequired("Please enter your password.")])
 	submit = SubmitField('Sign in')
 
+class ProjectForm(Form):
+	groupname = StringField("Project", validators=[DataRequired("Please enter your group name.")])
+	friends = StringField("Friends")
+	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, message="Goals must be at least 50 characters.")])
+	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=300, message="You must write 300 characters or more.")])
+	submit = SubmitField("Begin")
