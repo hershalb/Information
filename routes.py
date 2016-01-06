@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from models import db, User, Projects
 from forms import SignupForm, LoginForm, ProjectForm
+import random
 import requests
 import json
 
@@ -11,6 +12,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/information'
 db.init_app(app)
 
 app.secret_key = "development-key"
+
+project_list = []
+
+def project_nums():
+	global project_list
+	project_id = int(random.random()*100000000)
+	if project_id in project_list:
+		return project_nums()
+	return project_id
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -105,6 +115,7 @@ def login():
 def form():
 	form = ProjectForm()
 	email = session['email']
+	project_id = project_nums()
 	user = User.query.filter_by(email=email).first()
 	user_id = user.uid
 	firstname, lastname = user.firstname, user.lastname
@@ -117,10 +128,21 @@ def form():
 			goal = form.goal.data
 			accomplish = form.accomplish.data
 			friends = form.friends.data
-			newproject = Projects(name, user_id, goal, accomplish)
+			new_user_project = Projects(project_id, name, user_id, goal, accomplish)
 			if friends:
-				pass
-			db.session.add(newproject)
+				friends = friends.split(" ")
+				for i in friends:
+					friend = None
+					if "@" in i:
+						friend = User.query.filter_by(email=i[1:-2]).first()
+						print(i[:-1])
+						print(i)
+						friend_id = friend.uid
+					if friend:
+						new_friend_project = Projects(project_id, name, friend_id, '', '')
+						db.session.add(new_friend_project)
+						db.session.commit()
+			db.session.add(new_user_project)
 			db.session.commit()
 
 			return redirect(url_for('home', firstname = firstname, lastname = lastname))
@@ -131,16 +153,14 @@ def form():
 @app.route("/<projectnum>", methods = ["GET", "POST"])
 def project(projectnum):
 	email = session['email']
-	project = Projects.query.filter_by(p_id=projectnum).first()
+	projects = Projects.query.filter_by(p_id=projectnum).all()
 	user = User.query.filter_by(email=email).first()
-	user_id = user.uid
 	firstname, lastname = user.firstname, user.lastname
-	if project.u_id != user_id:
+	all_users = [project.u_id for project in projects]
+	if user.uid not in all_users:
 		return redirect(url_for("home", firstname=firstname, lastname=lastname))
 
-	all_users = Projects.query.filter_by(p_id = projectnum)
-
-	return render_template("projects.html", firstname=firstname, lastname=lastname, users = all_users)
+	return render_template("projects.html", firstname=firstname, lastname=lastname, users = projects)
 
 @app.route("/checkform", methods=['GET', 'POST'])
 def checkform():
@@ -151,7 +171,7 @@ def checkform():
 	if check is not None:
 		if user in check:
 			check.remove(user)
-		names = [r.firstname + ' ' + r.lastname for r in check]
+		names = [r.firstname + ' ' + r.lastname + ' (' + r.email + ")" for r in check]
 		user = str(names)
 		password = "password"
 		return json.dumps({'status':'OK','user':user,'pass':password})
