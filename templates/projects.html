@@ -61,16 +61,27 @@
                 <h4 class="modal-title">Oops! Looks like you didn't set your goal yet! </h4>
             </div>
             <div class="modal-body">
-                <form role="email">
+                <form method = "POST" action="/{{ users[0].p_id }}">
+                    {{ form.hidden_tag() }}
                     <div class="form-group">
                         <label for="email" class="sr-only">Goal</label>
-                        <input placeholder="Goal" style="height:100px;" class="form-control input-lg">
+                        {% if form.goal.errors %}
+                            {% for error in form.goal.errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.goal(placeholder="Goal", style="height:100px;", class="form-control input-lg")}}
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="password">Password</label>
-                        <input placeholder="How do you plan on accomplishing your goal?" style="height:300px;" class="form-control input-lg">
+                        {% if form.accomplish.errors %}
+                            {% for error in form.accomplish.errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.accomplish(placeholder="How do you plan on accomplishing your goal?", style="height:300px;", class="form-control input-lg")}}
                     </div>
-                        <button type="button" class="btn-info btn btn-sm">Add!</button>
+                        {{ form.submit(class="btn btn-info btn-lg") }}
                 </form>
             </div>
         </div>

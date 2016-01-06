@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from models import db, User, Projects
-from forms import SignupForm, LoginForm, ProjectForm
+from forms import SignupForm, LoginForm, ProjectForm, FriendProjectForm
 import random
 import requests
 import json
@@ -135,8 +135,6 @@ def form():
 					friend = None
 					if "@" in i:
 						friend = User.query.filter_by(email=i[1:-2]).first()
-						print(i[:-1])
-						print(i)
 						friend_id = friend.uid
 					if friend:
 						new_friend_project = Projects(project_id, name, friend_id, '', '')
@@ -154,7 +152,7 @@ def form():
 def project(projectnum):
 	email = session['email']
 	projects = Projects.query.filter_by(p_id=projectnum).all()
-	modal = False
+	modal = False # not set goal yet
 	new_projects = []
 	user = User.query.filter_by(email=email).first()
 	firstname, lastname = user.firstname, user.lastname
@@ -165,9 +163,23 @@ def project(projectnum):
 		if project.goal:
 			new_projects.append(project)
 	if user.uid in [project.u_id for project in new_projects]:
-		modal = True
-	print(modal)
-	return render_template("projects.html", firstname=firstname, lastname=lastname, users = new_projects, modal = modal)
+		modal = True # set goal
+	
+	form = FriendProjectForm()
+	if request.method == "POST":
+		if form.validate() == False:
+			return render_template('projects.html', firstname=firstname, lastname=lastname, users = new_projects, modal = modal, form = form)
+		else:
+			goal = form.goal.data
+			accomplish = form.accomplish.data
+			user_project = Projects.query.filter_by(u_id=user.uid).filter_by(p_id = projectnum).first()
+			user_project.goal = goal
+			user_project.plan = accomplish
+			modal = True
+			new_projects.append(user_project)
+			db.session.commit()
+		
+	return render_template("projects.html", firstname=firstname, lastname=lastname, users = new_projects, modal = modal, form = form)
 
 @app.route("/checkform", methods=['GET', 'POST'])
 def checkform():

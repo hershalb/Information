@@ -20,3 +20,8 @@ class ProjectForm(Form):
 	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, message="Goals must be at least 50 characters.")])
 	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=300, message="You must write 300 characters or more.")])
 	submit = SubmitField("Begin")
+
+class FriendProjectForm(Form):
+	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, message="Goals must be at least 50 characters.")])
+	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=300, message="You must write 300 characters or more.")])
+	submit = SubmitField("Add!")
