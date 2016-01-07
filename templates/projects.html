@@ -42,7 +42,7 @@
                     <li class="active"><a onClick="hide()" id="hideButton"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Menu</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">
+                    <li><a href="/{{ firstname }}.{{ lastname }}">
                     <span></span><strong style="font-size: 23px;"> Hello {{ firstname }}!</strong></a>
                     </li>
                 </ul>
@@ -92,23 +92,52 @@
         <ul id="nav-boys">
           <li><a href="/{{firstname}}.{{lastname}}">Home</a></li>
           <li><a class="active" href="#contact">Current</a></li>
+          <li><a data-toggle="modal" data-target="#planModal">Check in!</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
     </div>
-    <div id="full-div" class="background col-sm-10" style="overflow:scroll; ">
-        {% for user in users[:1] %}
-            <div class="circles" style="margin-top:0px;">
-                <div class = "square" style="">
-                    <p style="text-align:center;vertical-align:middle;color:red;display:table-cell;">{{ user.goal }}</p>
+    <div class="modal fade" role="dialog" id = "planModal">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> Add to your goal progress! </h4>
+            </div>
+            <div class="modal-body">
+                <form method = "POST" action="/{{ users[0].p_id }}">
+                    {{ form2.hidden_tag() }}
+                    <div class="form-group">
+                        <label class="sr-only" for="plan">Plan</label>
+                        {% if form2.plan.errors %}
+                            {% for error in form2.plan.errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        {{ form2.plan(placeholder="What have you done towards your goal?", style="height:300px;", class="form-control input-lg")}}
+                    </div>
+                        {{ form2.submit(class="btn btn-info btn-lg") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="full-div" class="background col-sm-10 container" style="overflow-x: auto;">
+        {% for user in users %}
+            <div class="row row-content" >
+                {% for plan in plans[users.index(user)] %}
+                <div class="col-sm-4" style="vertical-align:top;float:none;display: inline-block;border-radius:50%;border:solid thick white;height:450px;">
+                    <div class="col-sm-12" style="text-align:center;float:none;position:relative;top:100px;height:250px;">
+                        <p style="color:red;">{{ plan.addition }}</p> 
+                    </div>
                 </div>
-            <div>
-        {% endfor %}
-        {% for user in users[1:] %}
-            <div class="circles" style="margin-top:400px;margin-left:0px;">
-                <div class = "square1" style="">
-                    <p style="text-align:center;vertical-align:middle;color:red;display:table-cell;">{{ user.goal }}</p>
+                <div class="col-sm-1" style="float:none;top:220px;height:10px;display: inline-block;background-color:white;border:7px solid white;"></div>
+                {% endfor %}
+                <div class="col-sm-4" style="vertical-align:top;float:none;display: inline-block;border-radius:50%;border:solid thick white;height:450px;">
+                    <div class="col-sm-12" style="text-align:center;float:none;position:relative;top:100px;height:250px;">
+                        <p style="color:red;">{{ user.goal }}</p> 
+                    </div>
                 </div>
-            <div>
+            </div>
         {% endfor %}
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from models import db, User, Projects
-from forms import SignupForm, LoginForm, ProjectForm, FriendProjectForm
+from models import db, User, Projects, Progress
+from forms import SignupForm, LoginForm, ProjectForm, FriendProjectForm, PlanForm
 import random
 import requests
 import json
@@ -157,6 +157,7 @@ def project(projectnum):
 	user = User.query.filter_by(email=email).first()
 	firstname, lastname = user.firstname, user.lastname
 	all_users = [project.u_id for project in projects]
+	all_nums = [project.num for project in projects]
 	if user.uid not in all_users:
 		return redirect(url_for("home", firstname=firstname, lastname=lastname))
 	for project in projects:
@@ -164,22 +165,32 @@ def project(projectnum):
 			new_projects.append(project)
 	if user.uid in [project.u_id for project in new_projects]:
 		modal = True # set goal
+
+	user_project = Projects.query.filter_by(u_id=user.uid).filter_by(p_id = projectnum).first()
+
+	plans = [Progress.query.filter_by(userid = obj_user).filter(Progress.projid.in_(all_nums)).all() for obj_user in all_users]
 	
 	form = FriendProjectForm()
+	form2 = PlanForm()
 	if request.method == "POST":
 		if form.validate() == False:
-			return render_template('projects.html', firstname=firstname, lastname=lastname, users = new_projects, modal = modal, form = form)
+			if form2.validate() == False:
+				return render_template('projects.html', firstname=firstname, lastname=lastname, users = new_projects, modal = modal, form = form, form2 = form2, plans = plans)
+			else:
+				plan = form2.plan.data
+				new_user_plan = Progress(user_project.num, plan, user.uid)
+				db.session.add(new_user_plan)
+				db.session.commit()
 		else:
 			goal = form.goal.data
 			accomplish = form.accomplish.data
-			user_project = Projects.query.filter_by(u_id=user.uid).filter_by(p_id = projectnum).first()
 			user_project.goal = goal
 			user_project.plan = accomplish
 			modal = True
 			new_projects.append(user_project)
 			db.session.commit()
 		
-	return render_template("projects.html", firstname=firstname, lastname=lastname, users = new_projects, modal = modal, form = form)
+	return render_template("projects.html", firstname=firstname, lastname=lastname, users = new_projects, modal = modal, form = form, form2 = form2, plans = plans)
 
 @app.route("/checkform", methods=['GET', 'POST'])
 def checkform():

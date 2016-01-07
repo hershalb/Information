@@ -39,3 +39,15 @@ class Projects(db.Model):
     self.goal = goal
     self.plan = plan
 
+class Progress(db.Model):
+  __tablename__ = 'progress'
+  projid = db.Column(db.Integer, db.ForeignKey('projects.num'), nullable=False)
+  addition = db.Column(db.String(300))
+  userid = db.Column(db.Text, db.ForeignKey('users.uid'), nullable=False)
+  num = db.Column(db.Integer, primary_key = True)
+
+  def __init__(self, project_id, plan, user_id):
+    self.projid = project_id
+    self.addition = plan
+    self.userid = user_id
+
