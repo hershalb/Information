@@ -121,20 +121,20 @@
         </div>
     </div>
 </div>
-    <div id="full-div" class="background col-sm-10 container" style="overflow-x: auto;">
+    <div id="full-div" class="background col-sm-10 container" style="overflow:scroll;overflow-x: auto;white-space:nowrap;">
         {% for user in users %}
             <div class="row row-content" >
                 {% for plan in plans[users.index(user)] %}
-                <div class="col-sm-4" style="vertical-align:top;float:none;display: inline-block;border-radius:50%;border:solid thick white;height:450px;">
+                <div class="col-sm-6 col-md-4" style="vertical-align:top;float:none;display: inline-block;border-radius:50%;border:solid thick white;height:450px;">
                     <div class="col-sm-12" style="text-align:center;float:none;position:relative;top:100px;height:250px;">
-                        <p style="color:red;">{{ plan.addition }}</p> 
+                        <p style="white-space:normal;color:red;">{{ plan.addition }}</p> 
                     </div>
                 </div>
-                <div class="col-sm-1" style="float:none;top:220px;height:10px;display: inline-block;background-color:white;border:7px solid white;"></div>
+                <div class="col-sm-1" style="float:none;top:220px;height:10px;display: inline-block;background-color:white;border:solid thick white;"></div>
                 {% endfor %}
-                <div class="col-sm-4" style="vertical-align:top;float:none;display: inline-block;border-radius:50%;border:solid thick white;height:450px;">
+                <div class="col-sm-6 col-md-4" style="vertical-align:top;float:none;display: inline-block;border-radius:50%;border:solid thick white;height:450px;">
                     <div class="col-sm-12" style="text-align:center;float:none;position:relative;top:100px;height:250px;">
-                        <p style="color:red;">{{ user.goal }}</p> 
+                        <p style="white-space:normal;color:red;">{{ user.goal }}</p> 
                     </div>
                 </div>
             </div>

@@ -83,11 +83,29 @@
 
 </script>
 <script type="text/javascript">
-// var inputBox = document.getElementById("projectsearch")
+var inputBox = document.getElementById("projectsearch")
+var projectnames = []
+var newproj = []
+{% for project in projects %}
+    newproj.push("{{project}}")
+{% endfor %}
+{% for project in projects %}
+    projectnames.push("{{ project.name }}")
+{% endfor %}
+inputBox.onkeyup = function () {
+     var a = inputBox.value
+     var projectfinal = projectnames
+     
+    projectnames.forEach(function (item, index, array) {
+        if (item.indexOf(a) != 0) {
+            projectfinal.splice(projectfinal.indexOf(item), 1)
+        };
+        
+    });
+ };
 
-// inputBox.onkeyup = function () {
-//     var a = inputBox.value
-// }
+
+
 
 </script>
 

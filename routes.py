@@ -179,6 +179,7 @@ def project(projectnum):
 			else:
 				plan = form2.plan.data
 				new_user_plan = Progress(user_project.num, plan, user.uid)
+				plans[0].append(new_user_plan)
 				db.session.add(new_user_plan)
 				db.session.commit()
 		else:

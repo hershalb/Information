@@ -17,15 +17,15 @@ class LoginForm(Form):
 class ProjectForm(Form):
 	groupname = StringField("Project", validators=[DataRequired("Please enter your group name.")])
 	friends = StringField("Friends")
-	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, message="Goals must be at least 50 characters.")])
-	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=300, message="You must write 300 characters or more.")])
+	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, max=100, message="Goals must be from 50 to 100 characters.")])
+	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=100, max=300, message="You must write from 100 to 300 characters.")])
 	submit = SubmitField("Begin")
 
 class FriendProjectForm(Form):
-	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, message="Goals must be at least 50 characters.")])
-	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=300, message="You must write 300 characters or more.")])
+	goal = TextAreaField("Goal", validators=[DataRequired("Please enter your goal for the project."), Length(min=50, max=100, message="Goals must be from 50 to 100 characters.")])
+	accomplish = TextAreaField("Accomplish", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=100, max=300, message="You must write from 100 to 300 characters.")])
 	submit = SubmitField("Add!")
 
 class PlanForm(Form):
-	plan = TextAreaField("Plan", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=50, message="You must write 300 characters or more.")])
+	plan = TextAreaField("Plan", validators=[DataRequired("Please enter how you plan on accomplishing your goal."), Length(min=50, max=100, message="Plans must be from 50 to 100 characters.")])
 	submit = SubmitField("Add!")

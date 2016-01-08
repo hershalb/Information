@@ -75,7 +75,7 @@
                         <p class="error-message">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
-                {{ form.goal(placeholder="Goal", style="height:100px;", class="form-control input-lg")}}
+                {{ form.goal(placeholder="Goal", id="goalinput", style="height:100px;", class="form-control input-lg")}} <p id="goalchr">100</p>
             </div>
             <div class="form-group">
                 <label for="plan" class="sr-only">Plan</label>
@@ -84,7 +84,8 @@
                         <p class="error-message">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
-                {{ form.accomplish(placeholder="How do you plan on accomplishing your goal?", style="height:300px;", class="form-control input-lg")}}
+                {{ form.accomplish(placeholder="How do you plan on accomplishing your goal?", id="accoinput", style="height:300px;", class="form-control input-lg")}}
+                <p id="accochr">300</p>
             </div>
             </div>
             <div id="afterbutton">
@@ -101,20 +102,53 @@
     <script src="static/js/bootstrap.min.js"></script>
     <script>
 var letterCount = 0;
+var goalchr = document.getElementById("goalchr");
+var accochr = document.getElementById("accochr");
 var users = '';
 var clicked = [];
+
+new function ($) {
+        $.fn.getCursorPosition = function () {
+            var pos = 0;
+            var el = $(this).get(0);
+            // IE Support
+            if (document.selection) {
+                el.focus();
+                var Sel = document.selection.createRange();
+                var SelLength = document.selection.createRange().text.length;
+                Sel.moveStart('character', -el.value.length);
+                pos = Sel.text.length - SelLength;
+            }
+            // Firefox support
+            else if (el.selectionStart || el.selectionStart == '0')
+                pos = el.selectionStart;
+            return pos;
+        }
+    } (jQuery);
 
     function printworking(div) {
         bar = document.getElementById("chatinput")
         word = div.innerHTML;
         bar.value = (users + word + ', ');
+        letterCount = $("#chatinput").getCursorPosition();
         users = bar.value;
-        letterCount += (word.length + 2);
         clicked.push(word)
     }
 var inputBox = document.getElementById('chatinput');
+var goalBox = document.getElementById('goalinput');
+var accoBox = document.getElementById('accoinput');
 
-inputBox.onkeyup = function(){
+inputBox.onkeyup = function(e){
+    e.stopImmediatePropagation();
+    if (e.keyCode == 8 || e.keyCode == 32) {
+        letterCount = $("#chatinput").getCursorPosition();
+    }
+    if (inputBox.value.indexOf(", ") == -1) {
+        letterCount = 0;
+    }
+    if (inputBox.value == "") {
+        clicked = [];
+    }
     var myNode = document.getElementById("searchbar");
     while (myNode.lastChild.className === 'printchatbox') {
         myNode.removeChild(myNode.lastChild);
@@ -133,15 +167,19 @@ inputBox.onkeyup = function(){
         action = action.split(", ");
         action.forEach(function (item, index, array) {
             action[index] = item.slice(1, -1);
-            if (clicked.indexOf(action[index]) == -1) {
-                var div = document.createElement("div");
-                div.className = 'printchatbox';
-                document.getElementById('searchbar').appendChild(div);
-                div.innerHTML = action[index];
-                div.setAttribute("onclick", "printworking(this)");
-            };
         });
-        
+        if (action.length > 0 && action[0] != "") { // make sure that empty lists are not called.
+            action.forEach(function (item, index, array) {
+                if (clicked.indexOf(action[index]) == -1) { // make sure that you only click on each name once
+                    var div = document.createElement("div");
+                    div.className = 'printchatbox';
+                    document.getElementById('searchbar').appendChild(div);
+                    div.innerHTML = action[index];
+                    div.setAttribute("onclick", "printworking(this)");
+                };
+            });
+        };
+
     },
     error: function(error) {
         console.log(error);
@@ -151,10 +189,33 @@ inputBox.onkeyup = function(){
 });
     } else {
         document.getElementById('printchatbox').innerHTML = '';
-    };
-
-
+    }; 
 }
+goalBox.onkeydown = function (e) {
+    if (goalchr.innerHTML == "0") {
+        if (e.keyCode != 8) {
+            e.preventDefault()
+        }
+    }
+}
+
+goalBox.onkeyup = function () {
+    accochr.innerHTML = (100 - accoBox.value.length).toString()
+}
+
+accoBox.onkeydown = function (e) {
+    if (accochr.innerHTML == "0") {
+        if (e.keyCode != 8) {
+            e.preventDefault()
+        }
+    }
+}
+
+accoBox.onkeyup = function () {
+    accochr.innerHTML = (300 - accoBox.value.length).toString()
+}
+
+console.log("{{ firstname }}")
 
 </script>
 <script type="text/javascript">
