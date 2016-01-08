@@ -8,7 +8,7 @@ import json
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/information'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://lmuyosyhfvyfxw:cvDHF7RDjj1ojb5zGfS5l0Sk2m@ec2-54-83-202-218.compute-1.amazonaws.com:5432/d1om33sc637o0s'
 db.init_app(app)
 
 app.secret_key = "development-key"
